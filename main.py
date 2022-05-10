@@ -1,3 +1,5 @@
+import os
+
 from flask_restful import Resource, Api
 from flask import Flask, request
 from flasgger import Swagger, LazyString, LazyJSONEncoder
@@ -66,4 +68,5 @@ def hello_world():
 # api.add_resource(TagsController, '/tags')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = os.environ.get("PORT", 5000)
+    app.run(debug=False, host ="0,0,0,0", port=port)
