@@ -1,5 +1,4 @@
 from flask_restful import Resource, Api
-from service import FileService
 from flask import Flask, request
 from flasgger import Swagger, LazyString, LazyJSONEncoder
 from flasgger import swag_from
@@ -41,30 +40,30 @@ def hello_world():
 
 
 
-class MoviesController(Resource):
-    def get(self):
-        return FileService.getMovies()
-
-
-class LinksController(Resource):
-    def get(self):
-        return FileService.getLinks()
-
-
-class RatingsController(Resource):
-    def get(self):
-        return FileService.getRatings()
-
-
-class TagsController(Resource):
-    def get(self):
-        return FileService.getTags()
-
-
-api.add_resource(MoviesController, '/movies')
-api.add_resource(LinksController, '/links')
-api.add_resource(RatingsController, '/ratings')
-api.add_resource(TagsController, '/tags')
+# class MoviesController(Resource):
+#     def get(self):
+#         return FileService.getMovies()
+#
+#
+# class LinksController(Resource):
+#     def get(self):
+#         return FileService.getLinks()
+#
+#
+# class RatingsController(Resource):
+#     def get(self):
+#         return FileService.getRatings()
+#
+#
+# class TagsController(Resource):
+#     def get(self):
+#         return FileService.getTags()
+#
+#
+# api.add_resource(MoviesController, '/movies')
+# api.add_resource(LinksController, '/links')
+# api.add_resource(RatingsController, '/ratings')
+# api.add_resource(TagsController, '/tags')
 
 if __name__ == '__main__':
     app.run(debug=True)
