@@ -40,9 +40,9 @@ swagger = Swagger(app, template=swagger_template,
 def hello_world():
     return "Hello World!!!"
 
-@swag_from("hello_world.yml", methods=['GET'])
-@app.route("/")
-def hello_world():
+@swag_from("person_image.yml", methods=['GET'])
+@app.route("/picture")
+def upload_picture():
     return "Hello World!!!"
 
 
