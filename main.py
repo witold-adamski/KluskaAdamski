@@ -40,6 +40,11 @@ swagger = Swagger(app, template=swagger_template,
 def hello_world():
     return "Hello World!!!"
 
+@swag_from("hello_world.yml", methods=['GET'])
+@app.route("/")
+def hello_world():
+    return "Hello World!!!"
+
 
 
 # class MoviesController(Resource):
