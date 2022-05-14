@@ -1,3 +1,7 @@
 flasgger==0.9.5
 Flask==2.0.2
 Flask_RESTful==0.3.9
+Werkzeug~=2.0.2
+opencv-python~=4.5.5.64
+cvlib~=0.2.7
+numpy~=1.22.3

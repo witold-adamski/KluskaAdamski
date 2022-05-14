@@ -4,11 +4,19 @@ from flask_restful import Resource, Api
 from flask import Flask, request
 from flasgger import Swagger, LazyString, LazyJSONEncoder
 from flasgger import swag_from
+from flask_restx import Api, Resource
+from werkzeug.datastructures import FileStorage
+from  person_detection import get_results
 
+UPLOAD_FOLDER = '/uploads'
 app = Flask(__name__)
 api = Api(app)
 app.json_encoder = LazyJSONEncoder
 
+upload_parser = api.parser()
+upload_parser.add_argument('file',
+                           location='files',
+                           type=FileStorage)
 
 swagger_template = dict(
 info = {
@@ -23,29 +31,34 @@ swagger_config = {
     "specs": [
         {
             "endpoint": 'hello_world',
-            "route": '/hello_world.json',
+            "route": '/main',
             "rule_filter": lambda rule: True,
             "model_filter": lambda tag: True,
         }
     ],
     "static_url_path": "/flasgger_static",
     "swagger_ui": True,
-    "specs_route": "/apidocs/"
+    "specs_route": "/"
 }
 swagger = Swagger(app, template=swagger_template,
                   config=swagger_config)
 
 @swag_from("hello_world.yml", methods=['GET'])
-@app.route("/")
+@app.route("/main")
 def hello_world():
     return "Hello World!!!"
 
-@swag_from("person_image.yml", methods=['GET'])
-@app.route("/picture")
-def upload_picture():
-    return "Hello World!!!"
 
-
+@api.route('/upload/')
+@api.expect(upload_parser)
+class UploadDemo(Resource):
+    def post(self):
+        args = upload_parser.parse_args()
+        file = args.get('file')
+        file.save(os.path.join('uploads/', file.filename))
+        result = get_results('uploads/'+file.filename)
+        os.remove('uploads/'+file.filename)
+        return result
 
 # class MoviesController(Resource):
 #     def get(self):
