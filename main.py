@@ -1,12 +1,12 @@
 import os
 
 from flask_restful import Resource, Api
-from flask import Flask, request
+from flask import Flask, request, send_file
 from flasgger import Swagger, LazyString, LazyJSONEncoder
 from flasgger import swag_from
 from flask_restx import Api, Resource
 from werkzeug.datastructures import FileStorage
-from  person_detection import get_results
+from person_detection import get_results
 
 UPLOAD_FOLDER = '/uploads'
 app = Flask(__name__)
@@ -56,9 +56,8 @@ class UploadDemo(Resource):
         args = upload_parser.parse_args()
         file = args.get('file')
         file.save(os.path.join('uploads/', file.filename))
-        result = get_results('uploads/'+file.filename)
-        os.remove('uploads/'+file.filename)
-        return result
+        get_results('uploads/'+file.filename)
+        return send_file('processed_images/'+file.filename, as_attachment=True)
 
 # class MoviesController(Resource):
 #     def get(self):

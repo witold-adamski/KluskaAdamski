@@ -1,6 +1,8 @@
+import os
+
 import cv2
 import cvlib as cv
-# from cvlib.object_detection import draw_bbox
+from cvlib.object_detection import draw_bbox
 # import time
 import numpy
 import tensorflow
@@ -16,30 +18,30 @@ def process_image(image) -> tuple[list, list, list]:
     return bboxes, labels, confidences
 
 
-# def draw_bbox_for_persons(
-#         image_path: str,
-#         directory: str,
-#         labels: list,
-#         bboxes: list,
-#         confidences: list) -> None:
-#     bbox_person: list = []
-#     label_person: list = []
-#     image_name: str = image_path.split("\\")[-1]
-#     image: numpy.ndarray = cv2.imread(image_path)
-#     colors: list[:tuple] = []
-#     for bbox, label, confidence in zip(bboxes, labels, confidences):
-#         if label == 'person':
-#             bbox_person.append(bbox)
-#             label_person.append(label)
-#             colors.append((0, 0, 255))
-#     processed_image = draw_bbox(
-#         image,
-#         bbox_person,
-#         label_person,
-#         confidences,
-#         write_conf=True,
-#         colors=colors)
-#     cv2.imwrite(".\\" + directory + ".\\" + image_name, processed_image)
+def draw_bbox_for_persons(
+        image_path: str,
+        directory: str,
+        labels: list,
+        bboxes: list,
+        confidences: list) -> None:
+    bbox_person: list = []
+    label_person: list = []
+    image_name: str = image_path.split("/")[-1]
+    image: numpy.ndarray = cv2.imread(image_path)
+    colors: list[:tuple] = []
+    for bbox, label, confidence in zip(bboxes, labels, confidences):
+        if label == 'person':
+            bbox_person.append(bbox)
+            label_person.append(label)
+            colors.append((0, 0, 255))
+    processed_image = draw_bbox(
+        image,
+        bbox_person,
+        label_person,
+        confidences,
+        write_conf=True,
+        colors=colors)
+    cv2.imwrite(os.path.join('processed_images/', image_name), processed_image)
 
 
 # def print_picture(image_path: str) -> None:
@@ -62,19 +64,19 @@ def get_results(image) -> None:
     if person_counter == 0:
         return f"Nie wykryto żadnych osób na zdjęciu"
     else:
-        return f"Wykryto {person_counter} osób na zdjęciu"
-    #     draw_bbox_for_persons(
-    #         image_path,
-    #         IMAGE_OUTPUT_DIRECTORY,
-    #         labels,
-    #         bboxes,
-    #         confidences)
+        # return f"Wykryto {person_counter} osób na zdjęciu"
+        draw_bbox_for_persons(
+            image,
+            IMAGE_OUTPUT_DIRECTORY,
+            labels,
+            bboxes,
+            confidences)
     # print_picture(
     #     IMAGE_OUTPUT_DIRECTORY + "\\" + image_path.split("\\")[-1])
 
 
 # IMAGE_INPUT_DIRECTORY: str = "images"
-# IMAGE_OUTPUT_DIRECTORY: str = "processedImages"
+IMAGE_OUTPUT_DIRECTORY: str = "processed_images"
 MINIMUM_CONFIDENCE: float = 0.4
 MODEL: str = "yolov4-tiny"
 # MODEL: str = "yolov4"
